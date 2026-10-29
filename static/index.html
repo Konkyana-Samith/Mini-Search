@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#f5f3ec">
+    <title>MiniSearch — Find the thread</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/static/style.css">
+    <script src="/static/script.js" defer></script>
+</head>
+
+<body>
+    <div class="app-shell">
+
+        <aside class="sidebar" id="sidebar">
+            <a class="brand" href="/" aria-label="MiniSearch home">
+                <span class="brand-mark">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <circle cx="10.8" cy="10.8" r="6.8"></circle>
+                        <path d="m16 16 4.5 4.5"></path>
+                        <path d="M8 10.8h5.6M10.8 8v5.6"></path>
+                    </svg>
+                </span>
+                <span class="brand-copy">
+                    <strong>MiniSearch</strong>
+                    <span>Find the thread.</span>
+                </span>
+            </a>
+
+            <button
+                class="sidebar-toggle"
+                id="sidebar-toggle"
+                type="button"
+                aria-label="Collapse sidebar"
+                aria-expanded="true"
+                aria-controls="sidebar"
+            >
+                <span aria-hidden="true">&#x2039;</span>
+            </button>
+
+            <p class="nav-label">WORKSPACE</p>
+
+            <nav class="navigation" aria-label="Main navigation">
+                <button class="nav-item active" type="button"
+                    data-view="search" aria-current="page">
+                    <span class="nav-icon" aria-hidden="true">&#x2315;</span>
+                    <span class="nav-text">Search</span>
+                </button>
+
+                <button class="nav-item" type="button" data-view="add">
+                    <span class="nav-icon" aria-hidden="true">&#xFF0B;</span>
+                    <span class="nav-text">Add documents</span>
+                </button>
+
+                <button class="nav-item" type="button" data-view="manage">
+                    <span class="nav-icon" aria-hidden="true">&#x25A4;</span>
+                    <span class="nav-text">Manage documents</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <div class="sidebar-note">
+                    <span class="note-mark" aria-hidden="true">&#x2733;</span>
+                    <p>Keep your ideas close.<br>Find them when you need them.</p>
+                </div>
+                <p class="sidebar-version">A little search, a little clarity.</p>
+            </div>
+        </aside>
+
+        <div class="mobile-overlay" id="mobile-overlay"></div>
+
+        <main class="main-content">
+            <header class="topbar">
+                <button
+                    class="mobile-menu"
+                    id="mobile-menu"
+                    type="button"
+                    aria-label="Open navigation"
+                    aria-expanded="false"
+                    aria-controls="sidebar"
+                >
+                    <span aria-hidden="true">&#x2630;</span>
+                </button>
+
+                <div class="breadcrumb">
+                    <span>Workspace</span>
+                    <span aria-hidden="true">/</span>
+                    <strong id="current-section">Search</strong>
+                </div>
+
+                <button
+                    class="theme-toggle"
+                    id="theme-toggle"
+                    type="button"
+                    aria-label="Switch to dark theme"
+                    title="Switch theme"
+                >
+                    <span id="theme-icon" aria-hidden="true">&#x263e;</span>
+                    <span class="theme-label">Appearance</span>
+                </button>
+            </header>
+
+            <div class="page-content">
+
+                <!-- SEARCH VIEW -->
+                <section class="view active" id="search-view">
+                    <div class="page-intro search-intro">
+                        <p class="eyebrow">YOUR KNOWLEDGE, CONNECTED</p>
+                        <h1>Find the <em>thread.</em></h1>
+                        <p class="intro-description">
+                            Good ideas shouldn't get lost in a pile of documents.
+                            Search yours, and find what matters.
+                        </p>
+                    </div>
+
+                    <section class="search-section" aria-label="Document search">
+                        <form id="search-form">
+                            <label class="visually-hidden" for="search-query">
+                                Search your documents
+                            </label>
+
+                            <span class="search-symbol" aria-hidden="true">&#x2315;</span>
+
+                            <input
+                                id="search-query"
+                                type="search"
+                                placeholder="Search by topic, concept, or keyword..."
+                                autocomplete="off"
+                                required
+                            >
+
+                            <button class="primary-button search-button" type="submit">
+                                Search <span aria-hidden="true">&#x2192;</span>
+                            </button>
+                        </form>
+
+                        <p class="search-hint">
+                            <span aria-hidden="true">&#x21b3;</span>
+                            Start with an idea. A single keyword works too.
+                        </p>
+                    </section>
+
+                    <section class="results-section" aria-labelledby="results-heading">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow">YOUR LIBRARY</p>
+                                <h2 id="results-heading">Search results</h2>
+                            </div>
+                            <p id="search-status" class="status-text" role="status"
+                                aria-live="polite">Ready when you are.</p>
+                        </div>
+
+                        <div id="search-results" class="results-list"></div>
+
+                        <div class="empty-state" id="search-empty">
+                            <span class="empty-mark" aria-hidden="true">&#x2315;</span>
+                            <h3>A little room for discovery.</h3>
+                            <p>Search for something above, or add your first document to get started.</p>
+                            <button class="text-button" type="button" data-view="add">
+                                Add your first document <span aria-hidden="true">&#x2192;</span>
+                            </button>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- ADD DOCUMENT VIEW -->
+                <section class="view" id="add-view">
+                    <div class="page-intro">
+                        <p class="eyebrow">GROW YOUR LIBRARY</p>
+                        <h1>Make room for <em>ideas.</em></h1>
+                        <p class="intro-description">
+                            Save a document here. It will be ready to search whenever you need it.
+                        </p>
+                    </div>
+
+                    <section class="content-panel">
+                        <form id="document-form" class="document-form">
+                            <div class="field">
+                                <label for="document-id">Document ID</label>
+                                <input id="document-id" type="number" min="1"
+                                    placeholder="e.g. 101" required>
+                                <p class="field-hint">Use a unique ID for a new document.</p>
+                            </div>
+
+                            <div class="field">
+                                <label for="document-title">Title</label>
+                                <input id="document-title" type="text"
+                                    placeholder="Give your document a clear title"
+                                    maxlength="200" required>
+                            </div>
+
+                            <div class="field">
+                                <label for="document-content">Content</label>
+                                <textarea id="document-content" rows="8"
+                                    placeholder="Write or paste your document content here..."
+                                    required></textarea>
+                                <p class="field-hint">The content is what MiniSearch uses to find your document.</p>
+                            </div>
+
+                            <div class="form-actions">
+                                <button class="primary-button" type="submit">
+                                    Save document <span aria-hidden="true">&#x2192;</span>
+                                </button>
+                                <p id="document-status" class="status-text"
+                                    role="status" aria-live="polite"></p>
+                            </div>
+                        </form>
+
+                        <!-- SUCCESS PANEL — shown after a document is saved successfully -->
+                        <div
+                            id="save-success-panel"
+                            class="success-panel"
+                            role="region"
+                            aria-labelledby="success-heading"
+                            hidden
+                        >
+                            <div class="success-icon" aria-hidden="true">&#x2713;</div>
+
+                            <h2 id="success-heading" class="success-heading" tabindex="-1">
+                                Document saved
+                            </h2>
+
+                            <div class="success-meta">
+                                <p class="success-doc-title" id="success-doc-title"></p>
+                                <p class="success-doc-id" id="success-doc-id"></p>
+                            </div>
+
+                            <p class="success-message">
+                                Your document is indexed and ready to search.
+                            </p>
+
+                            <div class="success-actions">
+                                <button
+                                    id="go-to-search-btn"
+                                    class="primary-button"
+                                    type="button"
+                                >
+                                    Go to Search <span aria-hidden="true">&#x2192;</span>
+                                </button>
+                                <button
+                                    id="add-another-btn"
+                                    class="secondary-button"
+                                    type="button"
+                                >
+                                    Add another document
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+
+                <!-- MANAGE DOCUMENTS VIEW -->
+                <section class="view" id="manage-view">
+                    <div class="page-intro">
+                        <p class="eyebrow">YOUR COLLECTION</p>
+                        <h1>Everything in <em>its place.</em></h1>
+                        <p class="intro-description">
+                            Review your documents and remove anything you no longer need.
+                        </p>
+                    </div>
+
+                    <section class="content-panel">
+                        <div class="section-heading manage-heading">
+                            <div>
+                                <p class="eyebrow">DOCUMENTS</p>
+                                <h2>Your library</h2>
+                            </div>
+                            <button class="secondary-button" type="button" data-view="add">
+                                <span aria-hidden="true">&#xFF0B;</span> Add document
+                            </button>
+                        </div>
+
+                        <p id="manage-status" class="status-text" role="status"
+                            aria-live="polite"></p>
+                        <div id="document-list" class="document-list"></div>
+                    </section>
+                </section>
+
+                <footer class="page-footer">
+                    <span>MiniSearch</span>
+                    <span>Made for finding the things worth keeping.</span>
+                </footer>
+
+            </div>
+        </main>
+    </div>
+</body>
+</html>
